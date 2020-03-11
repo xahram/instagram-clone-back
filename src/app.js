@@ -16,4 +16,24 @@ app.post('/users', async (req, res) => {
     }
 })
 
+app.post('/login', async (req, res) => {
+
+    const user = await User.findOne({ email: req.body.email })
+    console.log(user);
+
+    try {
+        if (!user) {
+           return res.status(404).send('Error: Please provide valid properties.')
+        }
+        if (user.password === req.body.password) {
+           return res.status(200).send(user)
+        } else {
+            throw new Error('Please Enter Right Email or Password')
+        }
+    } catch (e) {
+        res.status(404).send(e)
+    }
+
+
+})
 app.listen(8000, () => { console.log('Listening on port 8000') })
