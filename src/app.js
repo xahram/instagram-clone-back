@@ -23,10 +23,10 @@ app.post('/login', async (req, res) => {
 
     try {
         if (!user) {
-           return res.status(404).send('Error: Please provide valid properties.')
+            return res.status(404).send('Error: Please provide valid properties.')
         }
         if (user.password === req.body.password) {
-           return res.status(200).send(user)
+            return res.status(200).send(user)
         } else {
             throw new Error('Please Enter Right Email or Password')
         }
@@ -35,5 +35,16 @@ app.post('/login', async (req, res) => {
     }
 
 
+})
+app.delete('/users/:id', async (req, res) => {
+    const user = await User.findByIdAndDelete(req.params.id)
+    try {
+        if (!user) {
+            return res.status(404).send("Couldn't Find User")
+        }
+        res.status(200).send(user);
+    } catch (e) {
+        res.status(500).send(e)
+    }
 })
 app.listen(8000, () => { console.log('Listening on port 8000') })
