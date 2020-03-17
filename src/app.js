@@ -47,4 +47,25 @@ app.delete('/users/:id', async (req, res) => {
         res.status(500).send(e)
     }
 })
+
+app.patch('/update/:id', async (req, res) => {
+    // const optionsArray = ['username', 'email', 'password'];
+    const reqParams = Object.keys(req.body)
+    const propertyValue = reqParams[0];
+    // const updateArray = reqParams.every((prop) => {
+    //     return prop !== 
+    // })
+    console.log(reqParams, propertyValue, req.params.id);
+
+    const user = await User.findByIdAndUpdate(req.params.id, { [propertyValue]: req.body[propertyValue] }, { new: true })
+    try {
+        if (!user) {
+            return res.status(404).send('Couldn\'t find user');
+        }
+        console.log(user)
+        res.status(200).send(user)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+})
 app.listen(8000, () => { console.log('Listening on port 8000') })
