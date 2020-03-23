@@ -3,10 +3,12 @@ const app = express();
 require('../db/mongoose')
 const User = require('../model/users')
 const multer = require('multer');
+const postsRouter = require('../routers/posts')
 
 const upload = multer()
 
 app.use(express.json())
+app.use(postsRouter)
 
 app.post('/users', async (req, res) => {
     const user = new User({ username: req.body.username, email: req.body.email, password: req.body.password })
