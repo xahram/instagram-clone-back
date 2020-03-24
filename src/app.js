@@ -97,4 +97,24 @@ app.post('/uploads/:id', upload.single('avatar'), async (req, res) => {
         res.send(error)
     }
 })
+
+app.get('/posts/:id', async (req, res) => {
+    const user = await User.findOne({ _id: req.params.id })
+    try {
+        if (!user) {
+            return res.status(404).send("No User Found")
+        }
+        // await user.populate('posts').execPopulate()
+        await user.populate({ path: 'posts', select: 'post' }).execPopulate()
+        const updatedPosts = user.posts.map((single) => {
+            return single.post.toString('base64')
+        })
+        res.status(200).send(updatedPosts)
+        // res.status(200).send(user.posts)
+    } catch (error) {
+        throw new Error(error)
+    }
+
+})
+
 app.listen(8000, () => { console.log('Listening on port 8000') })

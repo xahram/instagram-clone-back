@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
-const postsSchema = new mongoose.Schema({
+const Schema = mongoose.Schema
+const postsSchema = new Schema({
     post: {
         type: Buffer,
     },
@@ -11,6 +11,11 @@ const postsSchema = new mongoose.Schema({
     comment: {
         type: String,
         default: ''
+    },
+    uploader: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required:true
     }
 })
 
