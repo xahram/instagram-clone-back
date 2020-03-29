@@ -32,12 +32,15 @@ app.post('/login', async (req, res) => {
         }
         if (user.password === req.body.password) {
             // console.log("from aboce", user.avatar.toString('base64'))
-
+            const noOfPosts = (await user.populate('posts').execPopulate())
+            console.log(noOfPosts.posts.length)
             const updatedUser = {
                 username: user.username,
                 email: user.email,
                 _id: user._id,
-                avatar: user.avatar.toString('base64')
+                avatar: user.avatar.toString('base64'),
+                noOfPosts: noOfPosts.posts.length,
+                bio: user.bio,
             }
             // user.avatar.toString('base64')
             // console.log(user)
