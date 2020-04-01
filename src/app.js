@@ -7,7 +7,9 @@ const postsRouter = require('../routers/posts')
 
 const upload = multer()
 
+
 app.use(express.json())
+const port = process.env.PORT
 app.use(postsRouter)
 
 app.post('/users', async (req, res) => {
@@ -120,4 +122,4 @@ app.get('/posts/:id', async (req, res) => {
 
 })
 
-app.listen(8000, () => { console.log('Listening on port 8000') })
+app.listen(port, () => { console.log(`Listening on port ${port}`) })
