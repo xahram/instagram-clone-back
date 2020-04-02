@@ -3,6 +3,7 @@ const app = express();
 require('../db/mongoose')
 const User = require('../model/users')
 const multer = require('multer');
+const path = require('path')
 const postsRouter = require('../routers/posts')
 
 const upload = multer()
@@ -10,7 +11,13 @@ const upload = multer()
 
 app.use(express.json())
 const port = process.env.PORT
+
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(postsRouter)
+
+
+
+
 
 app.post('/users', async (req, res) => {
     const user = new User({ username: req.body.username, email: req.body.email, password: req.body.password })
@@ -121,5 +128,48 @@ app.get('/posts/:id', async (req, res) => {
     }
 
 })
+app.get('/otherUserProfile/:username', async (req, res) => {
+
+    const user = await User.findOne({ username: req.params.username })
+
+    try {
+        if (!user) {
+            return res.status(404).send('Couldn\'t find such user.')
+        }
+        // Reason avatar does'nt require is becoz avatar model
+        // has a buffer property so it stores buffer
+        //Meanwhile posts is a virtual property hence populating
+        //returns array of buffers meaning individul array 
+        // member is basically one pic like avatar so we convert it
+        // to tostring using map and send updated posts
+        const noOfPosts = (await user.populate('posts').execPopulate())
+
+        const updatedPosts = noOfPosts.posts.map((single) => {
+            return single.post.toString('base64')
+        })
+
+        console.log(noOfPosts.posts)
+        // console.log(user)
+        const updatedUser = {
+            username: user.username,
+            avatar: user.avatar.toString('base64'),
+            noOfPosts: updatedPosts.length,
+            bio: user.bio,
+            posts: updatedPosts
+        }
+        // user.avatar.toString('base64')
+        // console.log(user)
+        // console.log(updatedUser)
+        return res.status(200).send(updatedUser)
+
+    } catch (e) {
+        res.status(404).send(e)
+    }
+
+
+})
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.listen(port, () => { console.log(`Listening on port ${port}`) })
