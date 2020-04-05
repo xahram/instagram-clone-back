@@ -142,24 +142,24 @@ app.get('/otherUserProfile/:username', async (req, res) => {
         //returns array of buffers meaning individul array 
         // member is basically one pic like avatar so we convert it
         // to tostring using map and send updated posts
-        const noOfPosts = (await user.populate('posts').execPopulate())
-
+        const noOfPosts = await user.populate('posts').execPopulate()
         const updatedPosts = noOfPosts.posts.map((single) => {
             return single.post.toString('base64')
         })
 
-        console.log(noOfPosts.posts)
+
+
+        // console.log(noOfPosts.posts)
         // console.log(user)
         const updatedUser = {
             username: user.username,
-            avatar: user.avatar.toString('base64'),
+            avatar: user.avatar ? user.avatar.toString('base64') : '',
             noOfPosts: updatedPosts.length,
             bio: user.bio,
             posts: updatedPosts
         }
-        // user.avatar.toString('base64')
-        // console.log(user)
-        // console.log(updatedUser)
+       
+        console.log(updatedUser)
         return res.status(200).send(updatedUser)
 
     } catch (e) {
