@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start":"node src/app.js",
     "dev":"env-cmd -f ./config/dev.env node src/app.js",
-    "db": "/Users/HP/Desktop/mongodb/mongodb/bin/mongod.exe --dbpath /Users/HP/Desktop/mongodb/mongodb-data"
+    "db": "/Users/HP/Desktop/mongodb/mongodb/bin/mongod.exe --dbpath /Users/HP/Desktop/mongodb/mongodb-data",
+    "heroku-postbuild": "cd front && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",

@@ -1,3 +1,7 @@
 /node_modules
 /images
 /config
+/front/node_modules
+/front/.gitIgnore
+/front/package.json
+/front/package-lock.json

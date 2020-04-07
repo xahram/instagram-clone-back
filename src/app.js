@@ -12,7 +12,7 @@ const upload = multer()
 app.use(express.json())
 const port = process.env.PORT
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '../front/build')));
 app.use(postsRouter)
 
 
@@ -158,7 +158,7 @@ app.get('/otherUserProfile/:username', async (req, res) => {
             bio: user.bio,
             posts: updatedPosts
         }
-       
+
         console.log(updatedUser)
         return res.status(200).send(updatedUser)
 
@@ -169,7 +169,8 @@ app.get('/otherUserProfile/:username', async (req, res) => {
 
 })
 app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../front/build/index.html'));
 });
 
-app.listen(port, () => { console.log(`Listening on port ${port}`) })
+app.listen(port, () => { console.log(`Listening on port ${port}`)
+})
